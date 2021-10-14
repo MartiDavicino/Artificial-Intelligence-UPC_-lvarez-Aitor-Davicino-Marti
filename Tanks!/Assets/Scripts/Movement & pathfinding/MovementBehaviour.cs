@@ -10,15 +10,15 @@ public class MovementBehaviour : MonoBehaviour
 
     public Transform target;
     public GameObject pointer;
-    public float turnSpeed = 2f;
-    public float maxDistance = 2f;
-    public float maxSpeed = 2f;
-    public float acceleration = 0f;
-    public float stopDistance = 0f;
-    public float turnAcceleration = 0f;
-    public float maxTurnSpeed = 0f;
-    public float maxVelocity = 2f;
-    public float movSpeed = 0f;
+    public float turnSpeed;
+    public float maxDistance;
+    public float maxSpeed;
+    public float acceleration;
+    public float stopDistance;
+    public float turnAcceleration;
+    public float maxTurnSpeed;
+    public float maxVelocity;
+    public float movSpeed;
 
     Vector3 movement = Vector3.zero;
     Quaternion rotation;
@@ -27,7 +27,15 @@ public class MovementBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        turnSpeed = 2f;
+        maxDistance = 2f;
+        maxSpeed = 2f;
+        acceleration = 0f;
+        stopDistance = 0f;
+        turnAcceleration = 0f;
+        maxTurnSpeed = 0f;
+        maxVelocity = 2f;
+        movSpeed = 0f;
     }
 
     // Update is called once per frame
