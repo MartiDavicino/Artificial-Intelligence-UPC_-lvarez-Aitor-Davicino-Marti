@@ -79,4 +79,9 @@ public class MovementBehaviour : MonoBehaviour
         Seek(pointer.transform);
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        
+    }
+
 }
