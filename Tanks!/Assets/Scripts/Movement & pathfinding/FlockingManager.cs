@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class FlockingManager : MonoBehaviour
 {
-    FlockingManager myManager;
 
     [Header("General")]
     public GameObject beePrefab01;
@@ -32,7 +31,6 @@ public class FlockingManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        myManager = GetComponent<FlockingManager>();
 
         //beePrefab[0] = beePrefab01;
         //beePrefab[1] = beePrefab01;
@@ -56,7 +54,7 @@ public class FlockingManager : MonoBehaviour
             //int r = Random.Range(0, 3);
  
             allBees[i] = (GameObject)Instantiate(beePrefab01, pos, Quaternion.LookRotation(randomDirection));
-            allBees[i].GetComponent<FlockingManager>().myManager = this;
+            //allBees[i].GetComponent<FlockingManager>().myManager = this;
         }
     }
 
