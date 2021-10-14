@@ -10,10 +10,10 @@ public class FlockingManager : MonoBehaviour
     public GameObject beePrefab02;
     public GameObject beePrefab03;
 
-    GameObject[] beePrefab = new GameObject[2];
+    GameObject[] beePrefab;
     
-    public int numBees;
-    public GameObject[] allBees;
+    int numBees;
+    GameObject[] allBees;
     public Vector3 swimLimits;
     bool bounded, randomize, followLeader;
     public GameObject leader;
@@ -31,12 +31,9 @@ public class FlockingManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        beePrefab = new GameObject[3] { beePrefab01, beePrefab02, beePrefab03 };
 
-        //beePrefab[0] = beePrefab01;
-        //beePrefab[1] = beePrefab01;
-        //beePrefab[2] = beePrefab01;
-
-        numBees = 20;
+        numBees = 40;
         swimLimits = new Vector3(7, 5, 7);
         bounded = true;
         randomize = false;
@@ -51,10 +48,17 @@ public class FlockingManager : MonoBehaviour
             Vector3 pos = this.transform.position + posOffset;
             Vector3 randomDirection=new Vector3(Random.Range(-offRot, offRot), Random.Range(-offRot, offRot), Random.Range(-offRot, offRot));
 
-            //int r = Random.Range(0, 3);
- 
-            allBees[i] = (GameObject)Instantiate(beePrefab01, pos, Quaternion.LookRotation(randomDirection));
+            int r = Random.Range(0, 3);
+            allBees[i] = (GameObject)Instantiate(beePrefab[r], pos, Quaternion.LookRotation(randomDirection));
             //allBees[i].GetComponent<FlockingManager>().myManager = this;
+
+
+
+            Animator animator = allBees[i].GetComponent<Animator>();
+            animator.Play("Idle", -1,Random.Range(0f,.9f));
+
+
+
         }
     }
 
