@@ -13,10 +13,17 @@ public class FlockingManager : MonoBehaviour
     GameObject[] beePrefab;
     
     int numBees;
-    GameObject[] allBees;
+    public GameObject[] allBees;
     public Vector3 swimLimits;
     bool bounded, randomize, followLeader;
     public GameObject leader;
+
+    //From Oscar's script
+    [HideInInspector]
+    public float leaderDeltaCalculate = 10f;
+    public float deltaCalculate = 2f;
+    public float leaderSpeed = 1;
+    public float leaderRotationSpeed = 0.1f;
 
     [Header("Fish Settings")]
     [Range(1f,5f)]
@@ -33,24 +40,23 @@ public class FlockingManager : MonoBehaviour
     {
         beePrefab = new GameObject[3] { beePrefab01, beePrefab02, beePrefab03 };
 
-        numBees = 40;
+        numBees = 20;
         swimLimits = new Vector3(7, 5, 7);
         bounded = true;
         randomize = false;
         followLeader = false;
 
         allBees = new GameObject[numBees];
-        float offPos = 3.5f;
-        float offRot = 3.5f;
+        
         for (int i = 0; i < numBees; ++i)
         {
-            Vector3 posOffset = new Vector3(Random.Range(-offPos, offPos), Random.Range(-offPos, offPos), Random.Range(-offPos, offPos));
+            Vector3 posOffset = RandomPosition();
             Vector3 pos = this.transform.position + posOffset;
-            Vector3 randomDirection=new Vector3(Random.Range(-offRot, offRot), Random.Range(-offRot, offRot), Random.Range(-offRot, offRot));
+            Vector3 randomDirection = RandomOrientation();
 
             int r = Random.Range(0, 3);
             allBees[i] = (GameObject)Instantiate(beePrefab[r], pos, Quaternion.LookRotation(randomDirection));
-            //allBees[i].GetComponent<FlockingManager>().myManager = this;
+
 
 
 
@@ -58,13 +64,25 @@ public class FlockingManager : MonoBehaviour
             animator.Play("Idle", -1,Random.Range(0f,.9f));
 
 
-
+            allBees[i].GetComponent<Flock>().myManager = this;
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    public Vector3 RandomPosition()
     {
-        
+        Vector3 pos;
+        pos.x = Random.Range(0, swimLimits.x);
+        pos.y = Random.Range(0, swimLimits.y);
+        pos.z = Random.Range(0, swimLimits.z);
+        return pos;
+    }
+    public Vector3 RandomOrientation()
+    {
+        Vector3 orientation;
+        orientation.x = Random.Range(-1, 1);
+        orientation.y = Random.Range(-1, 1);
+        orientation.z = Random.Range(-1, 1);
+        orientation.Normalize();
+        return orientation;
     }
 }
