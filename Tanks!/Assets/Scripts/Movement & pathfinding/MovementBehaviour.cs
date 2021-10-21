@@ -29,12 +29,12 @@ public class MovementBehaviour : MonoBehaviour
     {
         turnSpeed = 2f;
         maxDistance = 2f;
-        maxSpeed = 2f;
-        acceleration = 0f;
-        stopDistance = 0f;
-        turnAcceleration = 0f;
-        maxTurnSpeed = 0f;
-        maxVelocity = 2f;
+        maxSpeed = 10f;
+        acceleration = 1f;
+        stopDistance = 1f;
+        turnAcceleration = 1f;
+        maxTurnSpeed = 10f;
+        maxVelocity = 10f;
         movSpeed = 0f;
     }
 

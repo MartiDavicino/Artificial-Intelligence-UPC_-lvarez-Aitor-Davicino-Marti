@@ -54,8 +54,7 @@ public class Flock : MonoBehaviour
         {
             if (go != this.gameObject)
             {
-                Debug.Log(this.transform.position);
-                Debug.Log(go.transform.position);
+                
                 float distance = Vector3.Distance(go.transform.position, this.transform.position);
                 if (distance <= myManager.neighbourDistance)
                 {
