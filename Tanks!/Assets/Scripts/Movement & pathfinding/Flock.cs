@@ -6,7 +6,7 @@ public class Flock : MonoBehaviour
 {
     public FlockingManager myManager;
     public bool leader = false;
-    private float speed = 2;
+    public float speed = 2;
     private Vector3 direction;
     private float timePassed = 0f;
 
@@ -14,7 +14,11 @@ public class Flock : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (myManager == null) Debug.LogWarning("Flocking manager null...");
+        if (myManager == null) 
+        {
+            myManager = GameObject.Find("Flocking Manager").GetComponent<FlockingManager>();
+            Debug.LogWarning("Flocking manager null...");
+        } 
 
         if (!leader)
             timePassed = Random.Range(0, myManager.deltaCalculate);
@@ -27,14 +31,20 @@ public class Flock : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        UpdateFlock();
+    }
+
+    void UpdateFlock()
+    {
         timePassed += Time.deltaTime;
-        if (timePassed > myManager.deltaCalculate && !leader)
+        if (!leader && timePassed > myManager.deltaCalculate)
         {
-            direction = ((Cohesion() + Align() + Separate()).normalized + myManager.RandomOrientation() *1) * speed;
+            direction = ((Cohesion() + Align() + Separate()).normalized + myManager.RandomOrientation() * 1) * speed;
             direction += Leader();
             direction.Normalize();
             timePassed = 0;
         }
+
         else if (leader && timePassed > myManager.leaderDeltaCalculate)
         {
             speed = myManager.leaderSpeed;
@@ -46,6 +56,35 @@ public class Flock : MonoBehaviour
         transform.Translate(0.0f, 0.0f, Time.deltaTime * speed);
     }
 
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.tag=="Boundaries")
+        {
+            ChangeDirection();
+
+        }
+
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag=="Obstacles")
+        {
+            ChangeDirection();
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        //UpdateFlock();
+    }
+
+    void ChangeDirection()
+    {
+        
+        Vector3 inverseRot = new Vector3(-transform.rotation.x, -transform.rotation.y, -transform.rotation.z);
+        inverseRot -= myManager.RandomOrientation();
+        direction = inverseRot;
+    }
     Vector3 Cohesion()
     {
         Vector3 cohesion = Vector3.zero;
@@ -66,7 +105,6 @@ public class Flock : MonoBehaviour
         if (num > 0)
             cohesion = (cohesion / num - transform.position).normalized * speed;
 
-        Debug.Log(cohesion.normalized);
 
         return cohesion;
     }

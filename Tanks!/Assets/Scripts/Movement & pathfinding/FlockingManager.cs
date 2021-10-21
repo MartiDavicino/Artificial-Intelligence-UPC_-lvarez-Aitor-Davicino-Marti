@@ -30,7 +30,7 @@ public class FlockingManager : MonoBehaviour
     public float minSpeed;
     [Range(3f, 8f)]
     public float maxSpeed;
-    [Range(2.5f, 5f)]
+    [Range(2.5f, 50f)]
     public float neighbourDistance;
     [Range(.1f, 60f)]
     public float rotationSpeed;
@@ -40,12 +40,12 @@ public class FlockingManager : MonoBehaviour
     {
         minSpeed = 3f;
         maxSpeed = 5f;
-        neighbourDistance = 3f;
+        neighbourDistance = 15f;
         rotationSpeed = 30f;
 
         beePrefab = new GameObject[3] { beePrefab01, beePrefab02, beePrefab03 };
 
-        numBees = 20;
+        numBees = 60;
         flyLimits = new Vector3(7, 5, 7);
         bounded = true;
         randomize = false;
@@ -69,6 +69,7 @@ public class FlockingManager : MonoBehaviour
             {
                 allBees[i].GetComponent<Flock>().leader = true;
                 allBees[i].GetComponent<MovementBehaviour>().pointer = GameObject.Find("Pointer");
+                allBees[i].GetComponent<Flock>().speed *=2f;
             }
 
 

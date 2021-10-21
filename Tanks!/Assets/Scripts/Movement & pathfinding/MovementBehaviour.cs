@@ -27,15 +27,15 @@ public class MovementBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        turnSpeed = 2f;
+        turnSpeed = 20f;
         maxDistance = 2f;
-        maxSpeed = 10f;
+        maxSpeed = 1;
         acceleration = 1f;
-        stopDistance = 1f;
+        stopDistance = 2f;
         turnAcceleration = 1f;
-        maxTurnSpeed = 10f;
-        maxVelocity = 10f;
-        movSpeed = 0f;
+        maxTurnSpeed = 40f;
+        maxVelocity = 2f;
+        movSpeed = 2f;
     }
 
     // Update is called once per frame
@@ -69,12 +69,12 @@ public class MovementBehaviour : MonoBehaviour
     {
         float radius = 2f;
         float offset = 3f;
-        Vector3 localTarget = new Vector3(Random.Range(-1.0f, 1.0f), 0,Random.Range(-1.0f, 1.0f));
+        Vector3 localTarget = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
         localTarget.Normalize();
         localTarget *= radius;
-        localTarget += new Vector3(0, 0, offset);
+        //localTarget += new Vector3(0, 0, offset);
         Vector3 worldTarget = transform.TransformPoint(localTarget);
-        worldTarget.y = 0f;
+        //worldTarget.y = 0f;  //Uncommnet for 2D wander
         pointer.transform.position = worldTarget;
         Seek(pointer.transform);
     }
