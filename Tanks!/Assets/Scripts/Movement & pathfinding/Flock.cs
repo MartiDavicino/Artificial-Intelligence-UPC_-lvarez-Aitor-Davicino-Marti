@@ -25,30 +25,49 @@ public class Flock : MonoBehaviour
         else
             timePassed = myManager.leaderDeltaCalculate;
 
-        direction = myManager.RandomOrientation();
+        direction = myManager.RandomOrientation(-1f,1f);
     }
 
     // Update is called once per frame
     void Update()
     {
-        UpdateFlock();
+        if (DetectCollision())
+        {
+            Debug.Log("Change direction needed");
+
+            //It's not updated because the UpdateFlock is not called in all frames(?)
+            //Maybe set the timePassed inside ChangeDirection()
+            ChangeDirection();
+        }
+       
+        else
+        {
+            UpdateFlock();
+
+        }
+
+
     }
 
     void UpdateFlock()
     {
         timePassed += Time.deltaTime;
-        if (!leader && timePassed > myManager.deltaCalculate)
+        if (!leader&& timePassed >= myManager.deltaCalculate)
         {
-            direction = ((Cohesion() + Align() + Separate()).normalized + myManager.RandomOrientation() * 1) * speed;
-            direction += Leader();
-            direction.Normalize();
-            timePassed = 0;
+            if (!DetectCollision())
+            {
+                direction = ((Cohesion() + Align() + Separate()).normalized + myManager.RandomOrientation(-1f, 1) * 1) * speed;
+                direction += Leader();
+                direction.Normalize();
+                timePassed = 0;
+            }
         }
 
-        else if (leader && timePassed > myManager.leaderDeltaCalculate)
+        else if (leader && timePassed >= myManager.leaderDeltaCalculate)
         {
             speed = myManager.leaderSpeed;
-            direction += myManager.RandomOrientation() * myManager.leaderRotationSpeed;
+            direction += myManager.RandomOrientation(-1f,1f) * myManager.leaderRotationSpeed;
+            direction.Normalize();
             timePassed = 0;
         }
 
@@ -60,7 +79,7 @@ public class Flock : MonoBehaviour
     {
         if(other.tag=="Boundaries")
         {
-            ChangeDirection();
+            //ChangeDirection();
 
         }
 
@@ -69,21 +88,53 @@ public class Flock : MonoBehaviour
     {
         if(other.tag=="Obstacles")
         {
-            ChangeDirection();
+            //ChangeDirection();
         }
     }
 
     private void OnTriggerStay(Collider other)
     {
-        //UpdateFlock();
+      
     }
 
     void ChangeDirection()
     {
         
-        Vector3 inverseRot = new Vector3(-transform.rotation.x, -transform.rotation.y, -transform.rotation.z);
-        inverseRot -= myManager.RandomOrientation();
-        direction = inverseRot;
+
+        //Debug.Log("Actual rot : " + transform.rotation + "Inverse rot : " + inverseRot);
+
+        //inverseRot -= myManager.RandomOrientation();
+        
+        direction = myManager.RandomOrientation(-1f,1f);
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), myManager.rotationSpeed * Time.deltaTime);
+
+        timePassed = myManager.deltaCalculate;
+
+    }
+
+    bool DetectCollision()
+    {
+        bool ret = false;
+
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 2))
+        {
+            
+            if (hit.collider.tag == "Boundaries" || hit.collider.tag=="Obstacles")
+            {
+                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.red);
+                Debug.Log("Hit boundaries or obstacles");
+                ret = true;
+            }
+            //if (hit.collider.tag == "Player")
+            //{
+            //    Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
+            //    Debug.Log("Hit bee");
+            //    //ret = true;
+            //}
+
+        }
+        return ret;
     }
     Vector3 Cohesion()
     {

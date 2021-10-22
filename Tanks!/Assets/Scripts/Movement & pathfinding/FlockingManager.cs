@@ -21,7 +21,7 @@ public class FlockingManager : MonoBehaviour
     //From Oscar's script
     [HideInInspector]
     public float leaderDeltaCalculate = 10f;
-    public float deltaCalculate = 2f;
+    public float deltaCalculate = .5f;
     public float leaderSpeed = 1;
     public float leaderRotationSpeed = 0.1f;
 
@@ -45,11 +45,11 @@ public class FlockingManager : MonoBehaviour
 
         beePrefab = new GameObject[3] { beePrefab01, beePrefab02, beePrefab03 };
 
-        numBees = 60;
+        numBees =5;
         flyLimits = new Vector3(7, 5, 7);
         bounded = true;
         randomize = false;
-        followLeader = true;
+        followLeader = false;
 
         allBees = new GameObject[numBees];
         
@@ -57,19 +57,19 @@ public class FlockingManager : MonoBehaviour
         {
             Vector3 posOffset = RandomPosition();
             Vector3 pos = this.transform.position + posOffset;
-            Vector3 randomDirection = RandomOrientation();
+            Vector3 randomDirection = RandomOrientation(-1f,1f);
 
             int r = Random.Range(0, 2); 
             allBees[i] = (GameObject)Instantiate(beePrefab[r], pos, Quaternion.LookRotation(randomDirection));
 
-            if(i==0)
-                allBees[i] = (GameObject)Instantiate(beePrefab[2], pos, Quaternion.LookRotation(randomDirection));
 
-            if (i==0)
+
+            if (i == 0 && followLeader)
             {
+                allBees[i] = (GameObject)Instantiate(beePrefab[2], pos, Quaternion.LookRotation(randomDirection));
                 allBees[i].GetComponent<Flock>().leader = true;
                 allBees[i].GetComponent<MovementBehaviour>().pointer = GameObject.Find("Pointer");
-                allBees[i].GetComponent<Flock>().speed *=2f;
+                allBees[i].GetComponent<Flock>().speed *= 2f;
             }
 
 
@@ -90,12 +90,13 @@ public class FlockingManager : MonoBehaviour
         pos.z = Random.Range(0, flyLimits.z);
         return pos;
     }
-    public Vector3 RandomOrientation()
+    public Vector3 RandomOrientation(float min,float max)
     {
         Vector3 orientation;
-        orientation.x = Random.Range(-1, 1);
-        orientation.y = Random.Range(-1, 1);
-        orientation.z = Random.Range(-1, 1);
+     
+        orientation.x = Random.Range(min,max);
+        orientation.y = Random.Range(min,max);
+        orientation.z = Random.Range(min,max);
         orientation.Normalize();
         return orientation;
     }
