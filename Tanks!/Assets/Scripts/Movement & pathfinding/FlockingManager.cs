@@ -18,10 +18,11 @@ public class FlockingManager : MonoBehaviour
     bool bounded, randomize, followLeader;
     public GameObject leader;
 
+    public Camera camera;
     //From Oscar's script
     [HideInInspector]
     public float leaderDeltaCalculate = 10f;
-    public float deltaCalculate = .5f;
+    public float deltaCalculate = .01f;
     public float leaderSpeed = 1;
     public float leaderRotationSpeed = 0.1f;
 
@@ -38,14 +39,17 @@ public class FlockingManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+        camera = Camera.main;
+
         minSpeed = 3f;
         maxSpeed = 5f;
-        neighbourDistance = 15f;
+        neighbourDistance = 50f;
         rotationSpeed = 30f;
 
         beePrefab = new GameObject[3] { beePrefab01, beePrefab02, beePrefab03 };
 
-        numBees =30;
+        numBees =60;
         flyLimits = new Vector3(7, 5, 7);
         bounded = true;
         randomize = false;
@@ -62,7 +66,7 @@ public class FlockingManager : MonoBehaviour
             int r = Random.Range(0, 2); 
             allBees[i] = (GameObject)Instantiate(beePrefab[r], pos, Quaternion.LookRotation(randomDirection));
 
-
+           
 
             if (i == 0 && followLeader)
             {
@@ -80,6 +84,12 @@ public class FlockingManager : MonoBehaviour
 
             allBees[i].GetComponent<Flock>().myManager = this;
         }
+    }
+
+    private void Update()
+    {
+        camera.transform.LookAt(allBees[0].transform);
+
     }
 
     public Vector3 RandomPosition()

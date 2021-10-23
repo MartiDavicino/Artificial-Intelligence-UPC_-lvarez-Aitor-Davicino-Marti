@@ -40,13 +40,17 @@ public class Flock : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        DetectCollision();
-        UpdateFlock();
+        if (!DetectCollision())
+            UpdateFlock();
+        
     }
+
+    
 
     void UpdateFlock()
     {
         timePassed += Time.deltaTime;
+
         if(!DetectCollision())
         { 
         if (!leader && timePassed >= myManager.deltaCalculate)
@@ -98,7 +102,9 @@ public class Flock : MonoBehaviour
     {
 
 
-        direction = target;
+        //direction = target+myManager.RandomOrientation(-360f,360f);
+        direction = myManager.RandomOrientation(-360f, 360f);
+
 
         //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), myManager.rotationSpeed * Time.deltaTime);
         transform.rotation =Quaternion.Euler(direction);
@@ -118,7 +124,7 @@ public class Flock : MonoBehaviour
             Debug.DrawRay(transform.position, transform.TransformDirection(dir[i]) * rayLenght, Color.yellow);
 
 
-            if (Physics.Raycast(transform.position, transform.TransformDirection(dir[i]), out hit, rayLenght))
+            if (Physics.Raycast(transform.position, transform.TransformDirection(dir[i]), out hit, rayLenght) )
             {
                 if (hit.collider.tag == "Boundaries" || hit.collider.tag == "Obstacles")
                 {
@@ -126,9 +132,12 @@ public class Flock : MonoBehaviour
                     Debug.Log("Hit boundaries or obstacles");
                     ChangeDirection(myManager.InverseDirection(dir[i]));
                     ret = true;
+                    
                     break;
+                    
                 }
             }
+           
         }
 
 
