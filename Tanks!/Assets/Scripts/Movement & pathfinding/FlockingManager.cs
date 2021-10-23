@@ -45,7 +45,7 @@ public class FlockingManager : MonoBehaviour
 
         beePrefab = new GameObject[3] { beePrefab01, beePrefab02, beePrefab03 };
 
-        numBees =5;
+        numBees =30;
         flyLimits = new Vector3(7, 5, 7);
         bounded = true;
         randomize = false;
@@ -99,5 +99,13 @@ public class FlockingManager : MonoBehaviour
         orientation.z = Random.Range(min,max);
         orientation.Normalize();
         return orientation;
+    }
+    public Vector3 InverseDirection(Vector3 dir)
+    {
+        Vector3 inv;
+        inv.x = -dir.x;
+        inv.y = -dir.y;
+        inv.z = -dir.z;
+        return inv;
     }
 }

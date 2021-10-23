@@ -10,7 +10,7 @@ public class Flock : MonoBehaviour
     private Vector3 direction;
     private float timePassed = 0f;
 
-
+    private Vector3[] dir;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,50 +26,47 @@ public class Flock : MonoBehaviour
             timePassed = myManager.leaderDeltaCalculate;
 
         direction = myManager.RandomOrientation(-1f,1f);
+
+        dir = new Vector3[6];
+        dir[0] = Vector3.up;
+        dir[1] = Vector3.down;
+        dir[2] = Vector3.left;
+        dir[3] = Vector3.right;
+        dir[4] = Vector3.forward;
+        dir[5] = Vector3.back;
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (DetectCollision())
-        {
-            Debug.Log("Change direction needed");
-
-            //It's not updated because the UpdateFlock is not called in all frames(?)
-            //Maybe set the timePassed inside ChangeDirection()
-            ChangeDirection();
-        }
-       
-        else
-        {
-            UpdateFlock();
-
-        }
-
-
+        DetectCollision();
+        UpdateFlock();
     }
 
     void UpdateFlock()
     {
         timePassed += Time.deltaTime;
-        if (!leader&& timePassed >= myManager.deltaCalculate)
+        if(!DetectCollision())
+        { 
+        if (!leader && timePassed >= myManager.deltaCalculate)
         {
-            if (!DetectCollision())
-            {
-                direction = ((Cohesion() + Align() + Separate()).normalized + myManager.RandomOrientation(-1f, 1) * 1) * speed;
-                direction += Leader();
-                direction.Normalize();
-                timePassed = 0;
-            }
+
+            direction = ((Cohesion() + Align() + Separate()).normalized + myManager.RandomOrientation(-1f, 1) * 1) * speed;
+            direction += Leader();
+            direction.Normalize();
+            timePassed = 0;
+
         }
 
         else if (leader && timePassed >= myManager.leaderDeltaCalculate)
         {
             speed = myManager.leaderSpeed;
-            direction += myManager.RandomOrientation(-1f,1f) * myManager.leaderRotationSpeed;
+            direction += myManager.RandomOrientation(-1f, 1f) * myManager.leaderRotationSpeed;
             direction.Normalize();
             timePassed = 0;
         }
+    }
 
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), myManager.rotationSpeed * Time.deltaTime);
         transform.Translate(0.0f, 0.0f, Time.deltaTime * speed);
@@ -97,16 +94,14 @@ public class Flock : MonoBehaviour
       
     }
 
-    void ChangeDirection()
+    void ChangeDirection(Vector3 target)
     {
-        
 
-        //Debug.Log("Actual rot : " + transform.rotation + "Inverse rot : " + inverseRot);
 
-        //inverseRot -= myManager.RandomOrientation();
-        
-        direction = myManager.RandomOrientation(-1f,1f);
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), myManager.rotationSpeed * Time.deltaTime);
+        direction = target;
+
+        //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), myManager.rotationSpeed * Time.deltaTime);
+        transform.rotation =Quaternion.Euler(direction);
 
         timePassed = myManager.deltaCalculate;
 
@@ -115,25 +110,30 @@ public class Flock : MonoBehaviour
     bool DetectCollision()
     {
         bool ret = false;
-
+        int rayLenght = 4;
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 2))
-        {
-            
-            if (hit.collider.tag == "Boundaries" || hit.collider.tag=="Obstacles")
-            {
-                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.red);
-                Debug.Log("Hit boundaries or obstacles");
-                ret = true;
-            }
-            //if (hit.collider.tag == "Player")
-            //{
-            //    Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
-            //    Debug.Log("Hit bee");
-            //    //ret = true;
-            //}
 
+        for(int i=0;i<6;i++)
+        {
+            Debug.DrawRay(transform.position, transform.TransformDirection(dir[i]) * rayLenght, Color.yellow);
+
+
+            if (Physics.Raycast(transform.position, transform.TransformDirection(dir[i]), out hit, rayLenght))
+            {
+                if (hit.collider.tag == "Boundaries" || hit.collider.tag == "Obstacles")
+                {
+                    Debug.DrawRay(transform.position, transform.TransformDirection(dir[i]) * hit.distance, Color.red);
+                    Debug.Log("Hit boundaries or obstacles");
+                    ChangeDirection(myManager.InverseDirection(dir[i]));
+                    ret = true;
+                    break;
+                }
+            }
         }
+
+
+       
+        
         return ret;
     }
     Vector3 Cohesion()
