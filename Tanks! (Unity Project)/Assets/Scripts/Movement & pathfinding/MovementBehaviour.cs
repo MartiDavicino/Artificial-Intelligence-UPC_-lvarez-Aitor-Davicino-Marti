@@ -23,6 +23,7 @@ public class MovementBehaviour : MonoBehaviour
     Vector3 movement = Vector3.zero;
     Quaternion rotation;
     float freq = 0f;
+    float updateFreq;
 
     // Start is called before the first frame update
     void Start()
@@ -36,6 +37,7 @@ public class MovementBehaviour : MonoBehaviour
         maxTurnSpeed = 40f;
         maxVelocity = 2f;
         movSpeed = 2f;
+        updateFreq=2.0f;
     }
 
     // Update is called once per frame
@@ -43,9 +45,9 @@ public class MovementBehaviour : MonoBehaviour
     {
 
         freq += Time.deltaTime;
-        if (freq > 0.5)
+        if (freq > updateFreq)
         {
-            freq -= 0.5f;
+            freq -= updateFreq;
             if (seek) Seek(target);
             if (wander) Wander();
 
