@@ -21,6 +21,10 @@ namespace Complete
         public float m_MaxLaunchForce = 30f;        // The force given to the shell if the fire button is held for the max charge time.
         public float m_MaxChargeTime = 0.75f;       // How long the shell can charge for before it is fired at max force.
 
+        private Transform maxFireTransform;
+        private Transform minFireTrasnform;
+
+        public bool inverseDirection = false;
 
         private string m_FireButton;                // The input axis that is used for launching shells.
         private float m_CurrentLaunchForce;         // The force that will be given to the shell when the fire button is released.
@@ -38,6 +42,8 @@ namespace Complete
 
         private void Start()
         {
+            if (target == null)
+                target = gameObject.transform;
             // The fire axis is based on the player number.
             m_FireButton = "Fire" + m_PlayerNumber;
 
@@ -91,9 +97,12 @@ namespace Complete
 
         private void Fire()
         {
-            Debug.Log("Firing");
             // Set the fired flag so only Fire is only called once.
             m_Fired = true;
+            //Cannon direction
+            maxFireTransform = m_FireTransform;
+            maxFireTransform.transform.Rotate(-35, 0, 0);
+            m_FireTransform = maxFireTransform;
 
             // Create an instance of the shell and store a reference to it's rigidbody.
             Rigidbody shellInstance =
@@ -112,14 +121,27 @@ namespace Complete
 
         private void OrientTurret()
         {
-            int direction = 1;//1 is clockwise
-            if (tankTurret.transform.rotation.eulerAngles.y > FindTurretTarget().eulerAngles.y) direction = -1;
+            int direction;
+            if (inverseDirection)
+            {
+                direction = -1;
+                if (tankTurret.transform.rotation.eulerAngles.y > FindTurretTarget().eulerAngles.y) direction = 1;
+            }
+            else
+            {
+                direction = 1;
+                if (tankTurret.transform.rotation.eulerAngles.y > FindTurretTarget().eulerAngles.y) direction = -1;
+            }
+
 
             if (Mathf.Abs(tankTurret.transform.rotation.eulerAngles.y -FindTurretTarget().eulerAngles.y) < 1)
             {
+                Debug.Log("Target acquired!");
+                //Fire();
             }
             else tankTurret.transform.Rotate(Vector3.up * direction * rotationSpeed);
         }
+       
         private Quaternion FindTurretTarget()
         {
             Quaternion newRotation = Quaternion.LookRotation((target.position - tankTurret.transform.position).normalized);

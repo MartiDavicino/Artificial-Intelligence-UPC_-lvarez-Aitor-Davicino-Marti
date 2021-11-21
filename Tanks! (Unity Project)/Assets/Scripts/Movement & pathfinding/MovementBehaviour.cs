@@ -28,6 +28,9 @@ public class MovementBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (target == null)
+            target = gameObject.transform;
+
         turnSpeed = 20f;
         maxDistance = 2f;
         maxSpeed = 1;
