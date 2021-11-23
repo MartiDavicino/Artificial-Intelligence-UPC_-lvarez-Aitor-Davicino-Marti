@@ -21,8 +21,8 @@ namespace Complete
         public float m_MaxLaunchForce = 30f;        // The force given to the shell if the fire button is held for the max charge time.
         public float m_MaxChargeTime = 0.75f;       // How long the shell can charge for before it is fired at max force.
 
-        private Transform maxFireTransform;
-        private Transform minFireTrasnform;
+        private Vector3 minFireTransform;
+        private Vector3 maxFireTransform;
 
         public bool inverseDirection = false;
 
@@ -37,11 +37,18 @@ namespace Complete
             // When the tank is turned on, reset the launch force and the UI
             m_CurrentLaunchForce = m_MinLaunchForce;
             m_AimSlider.value = m_MinLaunchForce;
+
+            minFireTransform = new Vector3(0, 0, 0);
+            maxFireTransform = new Vector3(-70, 0, 0);
+
+            m_FireTransform.eulerAngles = minFireTransform;
         }
 
 
         private void Start()
         {
+            
+
             if (target == null)
                 target = gameObject.transform;
             // The fire axis is based on the player number.
@@ -50,7 +57,6 @@ namespace Complete
             // The rate that the launch force charges up is the range of possible forces by the max charge time.
             m_ChargeSpeed = (m_MaxLaunchForce - m_MinLaunchForce) / m_MaxChargeTime;
 
-            //Set tank turret
         }
 
         private void Update()
@@ -100,9 +106,10 @@ namespace Complete
             // Set the fired flag so only Fire is only called once.
             m_Fired = true;
             //Cannon direction
-            maxFireTransform = m_FireTransform;
-            maxFireTransform.transform.Rotate(-35, 0, 0);
-            m_FireTransform = maxFireTransform;
+            Debug.Log("Shoot at "+m_FireTransform.rotation.eulerAngles.x +" degrees");
+            //if (m_FireTransform.transform.rotation.eulerAngles.x > minFireTransform.x) m_FireTransform.eulerAngles = minFireTransform;
+
+            if (m_FireTransform.transform.rotation.eulerAngles.x < 360-maxFireTransform.x) m_FireTransform.eulerAngles = maxFireTransform;
 
             // Create an instance of the shell and store a reference to it's rigidbody.
             Rigidbody shellInstance =
@@ -121,6 +128,7 @@ namespace Complete
 
         private void OrientTurret()
         {
+            //Find if rotates clockwise or not
             int direction;
             if (inverseDirection)
             {
@@ -133,12 +141,13 @@ namespace Complete
                 if (tankTurret.transform.rotation.eulerAngles.y > FindTurretTarget().eulerAngles.y) direction = -1;
             }
 
-
+            //If target is on in front stop rotation
             if (Mathf.Abs(tankTurret.transform.rotation.eulerAngles.y -FindTurretTarget().eulerAngles.y) < 1)
             {
                 Debug.Log("Target acquired!");
                 //Fire();
             }
+            //Rotate turret until target is found
             else tankTurret.transform.Rotate(Vector3.up * direction * rotationSpeed);
         }
        
