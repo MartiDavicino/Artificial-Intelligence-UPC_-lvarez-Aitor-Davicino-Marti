@@ -13,7 +13,7 @@ public class Shooting : MonoBehaviour
     public GameObject turret; //tank turret
     public Rigidbody bullet; //bullet we will shoot
     public Transform fireTransform; //place where we spawn the bullets
-    public Transform reloadPlace; //place where you reload
+    private Transform reloadPlace; //place where you reload
 
     public AudioSource shootingAudio;
     public AudioClip chargingClip;
@@ -36,6 +36,7 @@ public class Shooting : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        reloadPlace = GameObject.Find("Reload Place").transform;
     }
 
     // Update is called once per frame
