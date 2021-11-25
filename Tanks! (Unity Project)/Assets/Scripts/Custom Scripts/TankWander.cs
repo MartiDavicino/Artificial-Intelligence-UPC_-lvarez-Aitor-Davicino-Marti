@@ -14,6 +14,7 @@ public class TankWander : MonoBehaviour
 
     public float distanceToChange = 6.5f; //distance where tank changes target point
 
+    private float deacceleration = 1 / 100f;
     //vector3 target points
     Vector3 localTarget;
     Vector3 worldTarget;
@@ -21,12 +22,15 @@ public class TankWander : MonoBehaviour
     private NavMeshAgent agent;
     private NavMeshHit hit;
 
-    public float distanceToTarget; 
+    public float distanceToTarget;
+
+    private GameObject enemyTank;
 
     // Start is called before the first frame update
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        enemyTank = GameObject.Find("Enemy Tank");
 
         //calculate wander
         localTarget = new Vector3(Random.Range(-1.0f, 1.0f), 0, Random.Range(-1.0f, 1.0f));
@@ -46,8 +50,10 @@ public class TankWander : MonoBehaviour
         //Debug direction
         Debug.DrawLine(transform.position, worldTarget, Color.green);
 
+        if (!enemyTank.activeSelf&&agent.speed>0)
+            agent.speed -= deacceleration;
         //Optimize route through navMesh
-        if (distanceToTarget <= distanceToChange || CheckIfWalkable(worldTarget))
+        if (distanceToTarget <= distanceToChange || CheckIfWalkable(worldTarget) && agent.speed >0)
         {
             localTarget = new Vector3(Random.Range(-1.0f, 1.0f), 0, Random.Range(-1.0f, 1.0f));
             localTarget.Normalize();

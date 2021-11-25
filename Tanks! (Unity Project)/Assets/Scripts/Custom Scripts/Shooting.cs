@@ -54,14 +54,22 @@ public class Shooting : MonoBehaviour
         angleSin = part1 / 2;
         shootingAngle = Mathf.Asin(angleSin) * Mathf.Rad2Deg;
 
-        //rotate the turret
-        turret.transform.LookAt(target.transform);
-        turret.transform.Rotate(turret.transform.right, shootingAngle, Space.World);
-
+        //rotate the turret if target is active
+        if (target.activeSelf)
+        {
+            turret.transform.LookAt(target.transform);
+            turret.transform.Rotate(turret.transform.right, shootingAngle, Space.World);
+        }
+        else
+        {
+            if(turret.transform.rotation.eulerAngles.x!=0)
+                turret.transform.Rotate(0, 3, 0);
+        }
 
         if (!reloading && enemy_detected)
         {
-            ShootBullet();
+            if(target.activeSelf)
+                Fire();
         }
 
         if (reloading)
@@ -85,7 +93,7 @@ public class Shooting : MonoBehaviour
         }
 
     }
-    void ShootBullet()
+    void Fire()
     {
         if (numBullets >= 0)
         {
