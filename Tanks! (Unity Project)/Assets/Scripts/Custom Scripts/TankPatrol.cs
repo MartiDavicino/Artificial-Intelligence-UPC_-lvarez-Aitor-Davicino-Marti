@@ -35,11 +35,10 @@ public class TankPatrol : MonoBehaviour
         distanceToDestination = Vector3.Distance(transform.position, destinations[destinationsStep].position);
         if (distanceToDestination < 1)
         {
+            destinationsStep++;
+
             if (destinationsStep == destinations.Length)
                 destinationsStep = 0;
-            else
-                destinationsStep++;
-
         }
 
         //set agent direction
