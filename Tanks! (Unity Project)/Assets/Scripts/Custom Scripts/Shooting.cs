@@ -13,7 +13,8 @@ public class Shooting : MonoBehaviour
     public GameObject turret; //tank turret
     public Rigidbody bullet; //bullet we will shoot
     public Transform fireTransform; //place where we spawn the bullets
-    private Transform reloadPlace; //place where you reload
+    [HideInInspector]
+    public Transform reloadPlace; //place where you reload
 
     public AudioSource shootingAudio;
     public AudioClip chargingClip;
@@ -62,8 +63,13 @@ public class Shooting : MonoBehaviour
         }
         else
         {
-            if(turret.transform.rotation.eulerAngles.x!=0)
-                turret.transform.Rotate(0, 3, 0);
+            if(360-turret.transform.rotation.eulerAngles.y>=1)
+                turret.transform.Rotate(0, 1, 0);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Fire();
         }
 
         if (!reloading && enemy_detected)
@@ -95,7 +101,7 @@ public class Shooting : MonoBehaviour
     }
     void Fire()
     {
-        if (numBullets >= 0)
+        if (numBullets > 0)
         {
             Rigidbody new_bullet = Instantiate(bullet, fireTransform.position, Quaternion.identity);
             new_bullet.transform.LookAt(target.transform);
