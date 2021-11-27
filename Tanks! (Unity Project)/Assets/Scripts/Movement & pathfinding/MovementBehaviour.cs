@@ -19,11 +19,12 @@ public class MovementBehaviour : MonoBehaviour
     public float maxTurnSpeed;
     public float maxVelocity;
     public float movSpeed;
+    public float minDistance;
 
     Vector3 movement = Vector3.zero;
     Quaternion rotation;
     float freq = 0f;
-    float updateFreq;
+    public float updateFreq;
 
     // Start is called before the first frame update
     void Start()
@@ -40,20 +41,27 @@ public class MovementBehaviour : MonoBehaviour
         maxTurnSpeed = 40f;
         maxVelocity = 2f;
         movSpeed = 2f;
-        updateFreq=2.0f;
+        updateFreq=8.0f;
+        minDistance = 15.0f;
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        CheckSeek(target);
+        if(seek){
+            Seek(target);
+        };
         freq += Time.deltaTime;
         if (freq > updateFreq)
         {
+            
             freq -= updateFreq;
-            if (seek) Seek(target);
-            if (wander) Wander();
-
+            if (seek == false)
+            {
+                Wander();
+            } 
+            
         }
         transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * turnSpeed);
         transform.position += transform.forward.normalized * maxVelocity * Time.deltaTime;
@@ -68,6 +76,17 @@ public class MovementBehaviour : MonoBehaviour
         movement = direction.normalized * acceleration;
         float angle = Mathf.Rad2Deg * Mathf.Atan2(movement.x, movement.z);
         rotation = Quaternion.AngleAxis(angle, Vector3.up);
+    }
+
+    void CheckSeek(Transform tar)
+    {
+        if(minDistance>= Vector3.Distance(tar.transform.position,transform.position))
+        {
+            seek = true;
+        }
+        else{
+            seek = false;
+        }
     }
 
      void Wander()
