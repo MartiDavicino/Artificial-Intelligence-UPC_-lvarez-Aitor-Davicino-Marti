@@ -43,6 +43,12 @@ public class Shooting : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
+
+    }
+
+    public void AimAndShoot()
+    {
         DetectEnemy();
 
         x = Vector3.Distance(target.transform.position, turret.transform.position);
@@ -63,7 +69,7 @@ public class Shooting : MonoBehaviour
         }
         else
         {
-            if(360-turret.transform.rotation.eulerAngles.y>=1)
+            if (360 - turret.transform.rotation.eulerAngles.y >= 1)
                 turret.transform.Rotate(0, 1, 0);
         }
 
@@ -74,7 +80,7 @@ public class Shooting : MonoBehaviour
 
         if (!reloading && enemy_detected)
         {
-            if(target.activeSelf)
+            if (target.activeSelf)
                 Fire();
         }
 
@@ -97,7 +103,6 @@ public class Shooting : MonoBehaviour
         {
             numBullets = 3;
         }
-
     }
     void Fire()
     {

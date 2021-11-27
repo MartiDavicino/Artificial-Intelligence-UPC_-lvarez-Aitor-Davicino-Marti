@@ -64,11 +64,11 @@ public class MovementBehaviour : MonoBehaviour
         if (freq > updateFreq)
         {
             
-            freq -= updateFreq;
-            if (!seek && !reload)
-            {
-                Wander();
-            } 
+            //freq -= updateFreq;
+            //if (!seek && !reload)
+            //{
+            //    Wander();
+            //} 
             
         }
         transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * turnSpeed);

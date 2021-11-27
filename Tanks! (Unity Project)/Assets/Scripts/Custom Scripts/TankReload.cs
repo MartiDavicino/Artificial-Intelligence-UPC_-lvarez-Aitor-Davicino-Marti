@@ -5,9 +5,6 @@ using UnityEngine.AI;
 
 public class TankReload : MonoBehaviour
 {
-
-
-
     //vector3 target points
     public Transform destination;
     
@@ -18,10 +15,9 @@ public class TankReload : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
+    public void GoTOBase()
     {
         agent = GetComponent<NavMeshAgent>();
-
         agent.destination = destination.position;
     }
 
@@ -29,14 +25,6 @@ public class TankReload : MonoBehaviour
     void Update()
     {
         Debug.DrawLine(transform.position, destination.position, Color.green);
-    }
-
-    //Check if Nav Mesh is walkable
-    bool CheckIfWalkable(Vector3 wolrd_target)
-    {
-        if (NavMesh.Raycast(transform.position, destination.position, out hit, NavMesh.AllAreas))
-            return true;
-        else return false;
     }
 
 }

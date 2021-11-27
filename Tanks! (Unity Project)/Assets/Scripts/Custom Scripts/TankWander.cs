@@ -48,7 +48,7 @@ public class TankWander : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    public void Wander()
     {
         if (!shootingComponent.hasNoBullets)
         {
