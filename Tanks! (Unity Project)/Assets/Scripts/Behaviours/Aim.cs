@@ -5,8 +5,8 @@ using UnityEngine;
 namespace BBUnity.Actions
 {
 
-    [Action("Navigation/Fire")]
-    public class Fire : GOAction
+    [Action("Navigation/Aim")]
+    public class Aim : GOAction
     {
         private Shooting shooting;
 
@@ -20,7 +20,7 @@ namespace BBUnity.Actions
 
         public override TaskStatus OnUpdate()
         {
-            shooting.Fire();
+            shooting.Aim();
             return TaskStatus.RUNNING;
         }
 

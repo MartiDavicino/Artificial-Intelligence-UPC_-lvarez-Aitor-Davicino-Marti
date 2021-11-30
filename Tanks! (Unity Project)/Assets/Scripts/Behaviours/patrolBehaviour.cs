@@ -5,22 +5,23 @@ using UnityEngine;
 namespace BBUnity.Actions
 {
 
-    [Action("Navigation/Fire")]
-    public class Fire : GOAction
+    [Action("Navigation/Patrol")]
+    [Help("Gets a random position from a given area and moves the game object to that point by using a NavMeshAgent")]
+    public class PatrolBehaviour : GOAction
     {
-        private Shooting shooting;
+        private TankPatrol tankP;
 
         [InParam("tank")]
         public GameObject tank;
 
         public override void OnStart()
         {
-            shooting = tank.GetComponent<Shooting>();
+            tankP = tank.GetComponent<TankPatrol>();
         }
 
         public override TaskStatus OnUpdate()
         {
-            shooting.Fire();
+            tankP.Patrol();
             return TaskStatus.RUNNING;
         }
 

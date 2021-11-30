@@ -26,7 +26,7 @@ public class TankPatrol : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    public void Patrol()
     {
         //Debug.Log("Chasing destination : " + destinationsStep);
         //Debug direction

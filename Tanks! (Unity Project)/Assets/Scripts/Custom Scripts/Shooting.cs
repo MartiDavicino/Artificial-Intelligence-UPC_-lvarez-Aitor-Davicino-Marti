@@ -21,7 +21,7 @@ public class Shooting : MonoBehaviour
     public AudioClip fireClip;
 
     //PARABOLIC SHOT VARIABLES
-    public float speed = 30f; //bullet valocity
+    public float speed = 20f; //bullet valocity
     public float gravity = Physics.gravity.y;  //gravity
     public float x; //distance from tank to target
     public float y; //enemy height
@@ -47,7 +47,7 @@ public class Shooting : MonoBehaviour
 
     }
 
-    public void AimAndShoot()
+    public void Aim()
     {
         DetectEnemy();
 
@@ -73,21 +73,21 @@ public class Shooting : MonoBehaviour
                 turret.transform.Rotate(0, 1, 0);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Fire();
-        }
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    Fire();
+        //}
 
-        if (!reloading && enemy_detected)
-        {
-            if (target.activeSelf)
-                Fire();
-        }
+        //if (!reloading && enemy_detected)
+        //{
+        //    if (target.activeSelf)
+        //        Fire();
+        //}
 
-        if (reloading)
-        {
-            Reload();
-        }
+        //if (reloading)
+        //{
+        //    Reload();
+        //}
 
         if (numBullets <= 0)
         {
@@ -104,7 +104,7 @@ public class Shooting : MonoBehaviour
             numBullets = 3;
         }
     }
-    void Fire()
+    public void Fire()
     {
         if (numBullets > 0)
         {
@@ -122,7 +122,7 @@ public class Shooting : MonoBehaviour
 
     }
 
-    void Reload()
+    public void Reload()
     {
         reloadTimer -= Time.deltaTime;
         if (reloadTimer <= 0)
