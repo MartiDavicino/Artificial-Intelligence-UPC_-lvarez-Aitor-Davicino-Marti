@@ -29,7 +29,7 @@ public class Shooting : MonoBehaviour
     public float shootingAngle; //shooting angle
 
     public float reloadTimer = 2f;
-    public bool reloading = false;
+    public bool reloading=true;
 
     public int numBullets = 3;
     public bool hasNoBullets = false;
@@ -38,12 +38,13 @@ public class Shooting : MonoBehaviour
     void Start()
     {
         reloadPlace = GameObject.Find("Reload Place").transform;
+        reloading = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (reloading) Reload();
 
     }
 
@@ -106,11 +107,11 @@ public class Shooting : MonoBehaviour
     }
     public void Fire()
     {
-        if (numBullets > 0)
+        if (numBullets > 0 && enemy_detected && !reloading)
         {
             Rigidbody new_bullet = Instantiate(bullet, fireTransform.position, Quaternion.identity);
             new_bullet.transform.LookAt(target.transform);
-            new_bullet.velocity = turret.transform.forward * speed;
+            new_bullet.velocity = turret.transform.forward * speed*0.9f;
 
             shootingAudio.clip = fireClip;
             shootingAudio.Play();
