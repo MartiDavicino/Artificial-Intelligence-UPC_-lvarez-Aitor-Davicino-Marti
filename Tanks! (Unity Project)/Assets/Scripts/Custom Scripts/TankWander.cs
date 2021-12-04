@@ -52,7 +52,7 @@ public class TankWander : MonoBehaviour
     {
         if (!shootingComponent.hasNoBullets)
         {
-            Debug.Log("Wandering");
+            //Debug.Log("Wandering");
             //calculate poiunt where tank is going
             distanceToTarget = Vector3.Distance(worldTarget, transform.position);
             //Debug direction
@@ -74,8 +74,8 @@ public class TankWander : MonoBehaviour
         }
         else
         {
-            Debug.DrawLine(transform.position, worldTarget, Color.blue);
-            Debug.Log("Going to reloading place : "+shootingComponent.reloadPlace.position);
+            Debug.DrawLine(transform.position, worldTarget, Color.red);
+            //Debug.Log("Going to reloading place : "+shootingComponent.reloadPlace.position);
 
             localTarget = shootingComponent.reloadPlace.transform.position;
             localTarget.Normalize();

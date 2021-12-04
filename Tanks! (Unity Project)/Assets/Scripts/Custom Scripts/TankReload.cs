@@ -24,7 +24,7 @@ public class TankReload : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.DrawLine(transform.position, destination.position, Color.green);
+        Debug.DrawLine(transform.position, destination.position, Color.black);
     }
 
 }

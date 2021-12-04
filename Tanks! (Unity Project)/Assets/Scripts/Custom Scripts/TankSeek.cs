@@ -25,7 +25,7 @@ public class TankSeek : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.DrawLine(transform.position, enemy.position, Color.green);
+        Debug.DrawLine(transform.position, enemy.position, Color.red);
         agent.destination = enemy.position;
 
     }
