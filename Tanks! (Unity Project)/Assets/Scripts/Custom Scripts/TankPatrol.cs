@@ -10,8 +10,8 @@ public class TankPatrol : MonoBehaviour
 
     //vector3 target points
     public Transform[] destinations;
-    int destinationsStep = 0;
-    float distanceToDestination;
+    public int destinationsStep = 0;
+    public float distanceToDestination;
 
     private NavMeshAgent agent;
     private NavMeshHit hit;
@@ -39,10 +39,12 @@ public class TankPatrol : MonoBehaviour
 
             if (destinationsStep == destinations.Length)
                 destinationsStep = 0;
+
+            agent.destination = destinations[destinationsStep].position;
+
         }
 
         //set agent direction
-        agent.destination = destinations[destinationsStep].position;
     }
 
     //Check if Nav Mesh is walkable
