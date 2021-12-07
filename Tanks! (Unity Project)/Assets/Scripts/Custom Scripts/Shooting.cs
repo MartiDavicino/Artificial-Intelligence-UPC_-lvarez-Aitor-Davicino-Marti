@@ -13,8 +13,9 @@ public class Shooting : MonoBehaviour
     public GameObject turret; //tank turret
     public Rigidbody bullet; //bullet we will shoot
     public Transform fireTransform; //place where we spawn the bullets
-    [HideInInspector]
     public Transform reloadPlace; //place where you reload
+
+    public TankReload rel; 
 
     public AudioSource shootingAudio;
     public AudioClip chargingClip;
@@ -39,6 +40,7 @@ public class Shooting : MonoBehaviour
     {
         reloadPlace = GameObject.Find("Reload Place").transform;
         reloading = true;
+        rel = GetComponent<TankReload>();
     }
 
     // Update is called once per frame
@@ -93,6 +95,7 @@ public class Shooting : MonoBehaviour
         if (numBullets <= 0)
         {
             hasNoBullets = true;
+            rel.reloaded = false;
         }
 
         else if (numBullets > 0)
@@ -103,6 +106,7 @@ public class Shooting : MonoBehaviour
         if (Vector3.Distance(transform.position, reloadPlace.position) <= 5.0f)
         {
             numBullets = 3;
+            rel.reloaded = true;
         }
     }
     public void Fire()

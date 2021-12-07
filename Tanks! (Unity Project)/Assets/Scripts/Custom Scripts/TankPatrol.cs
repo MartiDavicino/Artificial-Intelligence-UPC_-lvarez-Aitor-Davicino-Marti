@@ -13,6 +13,8 @@ public class TankPatrol : MonoBehaviour
     public int destinationsStep = 0;
     public float distanceToDestination;
 
+    public TankReload rel;
+
     private NavMeshAgent agent;
     private NavMeshHit hit;
 
@@ -21,7 +23,7 @@ public class TankPatrol : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-
+        rel = GetComponent<TankReload>();
         agent.destination = destinations[destinationsStep].position;
     }
 
@@ -33,6 +35,7 @@ public class TankPatrol : MonoBehaviour
         Debug.DrawLine(transform.position, destinations[destinationsStep].position, Color.black);
 
         distanceToDestination = Vector3.Distance(transform.position, destinations[destinationsStep].position);
+
         if (distanceToDestination < 1)
         {
             destinationsStep++;
@@ -42,6 +45,10 @@ public class TankPatrol : MonoBehaviour
 
             agent.destination = destinations[destinationsStep].position;
 
+        }
+        if (rel.reloaded==true)
+        {
+            agent.destination = destinations[destinationsStep].position;
         }
 
         //set agent direction

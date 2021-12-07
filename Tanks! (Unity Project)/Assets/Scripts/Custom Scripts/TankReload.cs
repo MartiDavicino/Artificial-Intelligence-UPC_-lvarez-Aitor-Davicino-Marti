@@ -12,6 +12,7 @@ public class TankReload : MonoBehaviour
 
     private NavMeshAgent agent;
     private NavMeshHit hit;
+    public bool reloaded = true;
 
 
     // Start is called before the first frame update
@@ -22,9 +23,9 @@ public class TankReload : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        Debug.DrawLine(transform.position, destination.position, Color.black);
-    }
+    //void Update()
+    //{
+    //    Debug.DrawLine(transform.position, destination.position, Color.black);
+    //}
 
 }
