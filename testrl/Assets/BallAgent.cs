@@ -11,7 +11,15 @@ public class BallAgent : Agent
     public Transform Target;
 	public float forceMultiplier = 10;
 
-	
+	public Transform[] spawnPositions;
+
+    public void SetRespawnPosition()
+    {
+		int pos = spawnPositions.Length;
+		int r = Random.Range(0, pos);
+
+		gameObject.transform.position = spawnPositions[r].position;
+    }
     public override void OnEpisodeBegin()
     {
        // If the Agent fell, zero its momentum
@@ -55,15 +63,32 @@ public class BallAgent : Agent
 		{
 			SetReward(1.0f);
 			EndEpisode();
+			SetRespawnPosition();
 		}
 
 		// Fell off platform
 		else if (this.transform.localPosition.y < 0)
 		{
 			EndEpisode();
+			SetRespawnPosition();
 		}
+
+		//Detect trap
+		
+	}
+
+	public void OnCollisionEnter(Collision collision)
+	{
+
+		if(collision.gameObject.tag=="trap")
+        {
+			EndEpisode();
+			//Position is not restarted
+			SetRespawnPosition();
+        }
 	}
 	
+
 	public override void Heuristic(in ActionBuffers actionsOut)
 	{
 		var continuousActionsOut = actionsOut.ContinuousActions;
@@ -71,3 +96,5 @@ public class BallAgent : Agent
 		continuousActionsOut[1] = Input.GetAxis("Vertical");
 	}
 }
+
+
