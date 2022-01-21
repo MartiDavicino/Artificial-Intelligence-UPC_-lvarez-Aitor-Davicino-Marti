@@ -13,12 +13,21 @@ public class BallAgent : Agent
 
 	public Transform[] spawnPositions;
 
-    public void SetRespawnPosition()
+	public GameObject ray;
+	Vector3 lastPosition;
+	Vector3 currentDirection;
+
+	public void SetRespawnPosition()
     {
 		//int pos = spawnPositions.Length;
 		//int r = Random.Range(0, pos);
 
-		gameObject.transform.position = spawnPositions[2].position;
+		this.transform.position = spawnPositions[2].position;
+		this.transform.localRotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+	}
+    public void Start()
+    {
+        SetRespawnPosition();
     }
     public override void OnEpisodeBegin()
     {
@@ -31,9 +40,14 @@ public class BallAgent : Agent
 			//this.transform.localPosition = new Vector3( 0, 0.5f, 0);
 			
 		}
+
 		SetRespawnPosition();
 		// Move the target to a new spot
 		//Target.localPosition = new Vector3(Random.value * 8 - 4,0.5f,Random.value * 8 - 4);
+
+		lastPosition = this.transform.localPosition;
+		currentDirection = Vector3.zero;
+		ray.transform.rotation=Quaternion.LookRotation(currentDirection);
 	}
 	
 	public override void CollectObservations(VectorSensor sensor)
@@ -46,8 +60,26 @@ public class BallAgent : Agent
 		sensor.AddObservation(rBody.velocity.x);
 		sensor.AddObservation(rBody.velocity.z);
 	}
-	
-	public override void OnActionReceived(ActionBuffers actionBuffers)
+
+    public  void FixedUpdate()
+    {
+        currentDirection=(this.transform.localPosition-lastPosition).normalized;
+		lastPosition=this.transform.localPosition;
+
+		if(currentDirection!=Vector3.zero)
+        {
+			ray.transform.rotation = Quaternion.Slerp(ray.transform.rotation, Quaternion.LookRotation(currentDirection), Time.deltaTime * 75);
+		}
+
+		if(StepCount>=MaxStep)
+        {
+			Debug.Log("Max step reached");
+			EndEpisode();
+        }
+
+    }
+
+    public override void OnActionReceived(ActionBuffers actionBuffers)
 	{
 		// Actions, size = 2
 		Vector3 controlSignal = Vector3.zero;
@@ -56,18 +88,20 @@ public class BallAgent : Agent
 		rBody.AddForce(controlSignal * forceMultiplier);
 
 		// Rewards
-		float distanceToTarget = Vector3.Distance(this.transform.localPosition, Target.localPosition);
+		//float distanceToTarget = Vector3.Distance(this.transform.localPosition, Target.localPosition);
 
 		// Reached target
-		if (distanceToTarget < 1.42f)
-		{
-			SetReward(1.0f);
+		SetReward(-1 / MaxStep);
+		if(StepCount>=MaxStep)
+        {
+			SetReward(-1.0f);
 			EndEpisode();
-		}
+        }
 
 		// Fell off platform
 		else if (this.transform.localPosition.y < 0)
 		{
+			SetReward(-1.0f);
 			EndEpisode();
 		}
 
@@ -80,9 +114,22 @@ public class BallAgent : Agent
 
 		if(collision.gameObject.tag=="trap")
         {
+			SetReward(-1.0f);
 			EndEpisode();
 			//Position is not restarted
         }
+		if (collision.gameObject.tag == "Finish")
+		{
+			SetReward(1.0f);
+			EndEpisode();
+			//Position is not restarted
+		}
+		if (collision.gameObject.tag == "wall")
+		{
+			SetReward(-1.0f);
+			EndEpisode();
+			//Position is not restarted
+		}
 	}
 	
 
