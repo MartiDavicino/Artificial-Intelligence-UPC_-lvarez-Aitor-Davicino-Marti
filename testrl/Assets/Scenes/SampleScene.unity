@@ -431,7 +431,6 @@ MonoBehaviour:
   - {fileID: 177497434}
   - {fileID: 1980919288}
   - {fileID: 50144751}
-  targetPosition: {fileID: 35523120}
 --- !u!54 &216494380
 Rigidbody:
   m_ObjectHideFlags: 0
