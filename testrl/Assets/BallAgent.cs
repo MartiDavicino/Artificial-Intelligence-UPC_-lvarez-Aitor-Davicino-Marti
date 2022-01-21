@@ -12,29 +12,32 @@ public class BallAgent : Agent
 	public float forceMultiplier = 10;
 
 	public Transform[] spawnPositions;
+	public Transform targetPosition;
 
     public void SetRespawnPosition()
     {
-		int pos = spawnPositions.Length;
-		int r = Random.Range(0, pos);
+		//int pos = spawnPositions.Length;
+		//int r = Random.Range(0, pos);
 
-		gameObject.transform.position = spawnPositions[r].position;
+		gameObject.transform.position = spawnPositions[2].position;
     }
     public override void OnEpisodeBegin()
     {
+
        // If the Agent fell, zero its momentum
         if (this.transform.localPosition.y < 0)
         {
             this.rBody.angularVelocity = Vector3.zero;
             this.rBody.velocity = Vector3.zero;
-            this.transform.localPosition = new Vector3( 0, 0.5f, 0);
-        }
+			//this.transform.localPosition = new Vector3( 0, 0.5f, 0);
+			SetRespawnPosition();
 
-        // Move the target to a new spot
-        Target.localPosition = new Vector3(Random.value * 8 - 4,
-                                           0.5f,
-                                           Random.value * 8 - 4);
-    }
+		}
+
+		// Move the target to a new spot
+		//Target.localPosition = new Vector3(Random.value * 8 - 4,0.5f,Random.value * 8 - 4);
+		Target.localPosition = targetPosition.transform.position;
+	}
 	
 	public override void CollectObservations(VectorSensor sensor)
 	{
@@ -63,14 +66,12 @@ public class BallAgent : Agent
 		{
 			SetReward(1.0f);
 			EndEpisode();
-			SetRespawnPosition();
 		}
 
 		// Fell off platform
 		else if (this.transform.localPosition.y < 0)
 		{
 			EndEpisode();
-			SetRespawnPosition();
 		}
 
 		//Detect trap
@@ -84,7 +85,6 @@ public class BallAgent : Agent
         {
 			EndEpisode();
 			//Position is not restarted
-			SetRespawnPosition();
         }
 	}
 	
