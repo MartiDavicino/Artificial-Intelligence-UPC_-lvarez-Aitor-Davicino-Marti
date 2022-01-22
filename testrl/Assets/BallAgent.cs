@@ -8,7 +8,7 @@ using Unity.MLAgents.Actuators;
 public class BallAgent : Agent
 {
     public Rigidbody rBody;
-    public Transform Target;
+    public Transform target;
 	public float forceMultiplier = 10;
 
 	public Transform[] spawnPositions;
@@ -27,6 +27,7 @@ public class BallAgent : Agent
 	}
     public void Start()
     {
+		
         SetRespawnPosition();
     }
     public override void OnEpisodeBegin()
@@ -53,7 +54,7 @@ public class BallAgent : Agent
 	public override void CollectObservations(VectorSensor sensor)
 	{
 		// Target and Agent positions
-		sensor.AddObservation(Target.localPosition);
+		sensor.AddObservation(target.localPosition);
 		sensor.AddObservation(this.transform.localPosition);
 
 		// Agent velocity
