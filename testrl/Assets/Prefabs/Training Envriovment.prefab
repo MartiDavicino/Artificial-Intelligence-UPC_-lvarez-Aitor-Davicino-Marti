@@ -1804,7 +1804,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8493036625537936810}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2f28af7860945d049ab837bdf51838c3, type: 3}
   m_Name: 
@@ -1817,10 +1817,10 @@ MonoBehaviour:
   target: {fileID: 1465597191531693949}
   forceMultiplier: 4
   spawnPositions:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 1465597191747571314}
+  - {fileID: 1465597189777572892}
+  - {fileID: 1465597191581519038}
+  - {fileID: 1465597189650220201}
   ray: {fileID: 7358512633851953739}
 --- !u!114 &4050320320032467305
 MonoBehaviour:
@@ -1829,7 +1829,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8493036625537936810}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a8a73a09359c9df4ead6853824f3008f, type: 3}
   m_Name: 

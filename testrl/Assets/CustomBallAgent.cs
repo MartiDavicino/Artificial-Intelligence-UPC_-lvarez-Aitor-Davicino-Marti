@@ -26,18 +26,18 @@ public class CustomBallAgent : Agent
 		int posA = Random.Range(-3, 3);
 		int posB = Random.Range(-3, 3);
 
-		//Position Correction
-		if (posA == 2) posA = 3;
-		else if (posA == -2) posA = -3;
-
-		if (posB == 0) posB = -1;
-		else if (posB == -2) posB = -3;
-		else if (posB == 2) posB = 3;
-
-		if (posA == 0 && posB == 1) posA = 1;
-		else if (posA == -1 && posB == 1) posA = -3;
-
-		this.transform.localPosition = new Vector3(posA * 5.0f, 1.5f, posB * 5.0f);
+		//Position Correction (?)
+		//if (posA == 2) posA = 3;
+		//else if (posA == -2) posA = -3;
+		//
+		//if (posB == 0) posB = -1;
+		//else if (posB == -2) posB = -3;
+		//else if (posB == 2) posB = 3;
+		//
+		//if (posA == 0 && posB == 1) posA = 1;
+		//else if (posA == -1 && posB == 1) posA = -3;
+		//
+		//this.transform.localPosition = new Vector3(posA * 5.0f, 1.5f, posB * 5.0f);
 
 		this.transform.localRotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
 

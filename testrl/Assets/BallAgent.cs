@@ -22,8 +22,27 @@ public class BallAgent : Agent
 		//int pos = spawnPositions.Length;
 		//int r = Random.Range(0, pos);
 
+
+		this.rBody.angularVelocity = Vector3.zero;
+		this.rBody.velocity = Vector3.zero;
+
+		// If the Agent fell, zero its momentum
+		if (this.transform.localPosition.y < 0)
+		{
+
+			//this.transform.localPosition = new Vector3( 0, 0.5f, 0);
+
+		}
+
+
 		this.transform.position = spawnPositions[1].position;
 		this.transform.localRotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+
+		lastPosition = this.transform.localPosition;
+		currentDirection = Vector3.zero;
+		ray.transform.rotation = Quaternion.LookRotation(currentDirection);
+
+		
 	}
     public void Start()
     {
@@ -32,30 +51,14 @@ public class BallAgent : Agent
     }
     public override void OnEpisodeBegin()
     {
-
-       // If the Agent fell, zero its momentum
-        if (this.transform.localPosition.y < 0)
-        {
-            this.rBody.angularVelocity = Vector3.zero;
-            this.rBody.velocity = Vector3.zero;
-			//this.transform.localPosition = new Vector3( 0, 0.5f, 0);
-			
-		}
-
-		SetRespawnPosition();
-		// Move the target to a new spot
-		//Target.localPosition = new Vector3(Random.value * 8 - 4,0.5f,Random.value * 8 - 4);
-
-		lastPosition = this.transform.localPosition;
-		currentDirection = Vector3.zero;
-		ray.transform.rotation=Quaternion.LookRotation(currentDirection);
+		
 	}
 	
 	public override void CollectObservations(VectorSensor sensor)
 	{
 		// Target and Agent positions
-		sensor.AddObservation(target.localPosition);
 		sensor.AddObservation(this.transform.localPosition);
+		sensor.AddObservation(target.localPosition);
 
 		// Agent velocity
 		sensor.AddObservation(rBody.velocity.x);
@@ -93,8 +96,10 @@ public class BallAgent : Agent
 
 		// Reached target
 		SetReward(-1 / MaxStep);
+
 		if(StepCount>=MaxStep)
         {
+			Debug.Log("Max Step Reached");
 			SetReward(-1.0f);
 			EndEpisode();
         }
@@ -106,14 +111,13 @@ public class BallAgent : Agent
 			EndEpisode();
 		}
 
-		//Detect trap
 		
 	}
 
 	public void OnCollisionEnter(Collision collision)
 	{
-
-		if(collision.gameObject.tag=="trap")
+		//Detect trap
+		if (collision.gameObject.tag=="trap")
         {
 			SetReward(-1.0f);
 			EndEpisode();
@@ -121,12 +125,14 @@ public class BallAgent : Agent
         }
 		if (collision.gameObject.tag == "Finish")
 		{
+			Debug.Log("Target Reached");
 			SetReward(1.0f);
 			EndEpisode();
 			//Position is not restarted
 		}
 		if (collision.gameObject.tag == "wall")
 		{
+			Debug.Log("Wall detected");
 			SetReward(-1.0f);
 			EndEpisode();
 			//Position is not restarted
