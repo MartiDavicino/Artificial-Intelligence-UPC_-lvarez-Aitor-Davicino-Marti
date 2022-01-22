@@ -22,7 +22,7 @@ public class BallAgent : Agent
 		//int pos = spawnPositions.Length;
 		//int r = Random.Range(0, pos);
 
-		this.transform.position = spawnPositions[2].position;
+		this.transform.position = spawnPositions[1].position;
 		this.transform.localRotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
 	}
     public void Start()
