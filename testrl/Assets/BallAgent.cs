@@ -46,14 +46,14 @@ public class BallAgent : Agent
 	}
     public void Start()
     {
-		
-        SetRespawnPosition();
+		Debug.Log("Training started");
     }
     public override void OnEpisodeBegin()
     {
-		
+		SetRespawnPosition();
+		Debug.Log("Here is working");
 	}
-	
+
 	public override void CollectObservations(VectorSensor sensor)
 	{
 		// Target and Agent positions
@@ -81,15 +81,18 @@ public class BallAgent : Agent
 			EndEpisode();
         }
 
-    }
+	}
 
-    public override void OnActionReceived(ActionBuffers actionBuffers)
+	public override void OnActionReceived(ActionBuffers actionBuffers)
 	{
 		// Actions, size = 2
 		Vector3 controlSignal = Vector3.zero;
 		controlSignal.x = actionBuffers.ContinuousActions[0];
 		controlSignal.z = actionBuffers.ContinuousActions[1];
 		rBody.AddForce(controlSignal * forceMultiplier);
+
+		Debug.Log("Here is working too");
+
 
 		// Rewards
 		//float distanceToTarget = Vector3.Distance(this.transform.localPosition, Target.localPosition);
@@ -111,7 +114,7 @@ public class BallAgent : Agent
 			EndEpisode();
 		}
 
-		
+
 	}
 
 	public void OnCollisionEnter(Collision collision)
