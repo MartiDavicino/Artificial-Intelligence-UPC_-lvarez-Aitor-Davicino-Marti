@@ -237,7 +237,7 @@ MonoBehaviour:
   m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: MazeBall
-  TeamId: 2
+  TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
   m_ObservableAttributeHandling: 0
@@ -256,11 +256,11 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 1000
+  MaxStep: 5000
   rBody: {fileID: 2768782154906793872}
   Target: {fileID: 4453500899978154039}
-  forceMultiplier: 4
-  ray: {fileID: 1450350578381278080}
+  speed: 5
+  sensor: {fileID: 1450350578381278080}
 --- !u!114 &124262853737912218
 MonoBehaviour:
   m_ObjectHideFlags: 0

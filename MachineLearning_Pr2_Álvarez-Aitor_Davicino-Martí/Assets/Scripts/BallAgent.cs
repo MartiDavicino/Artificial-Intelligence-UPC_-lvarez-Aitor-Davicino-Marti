@@ -9,41 +9,41 @@ public class BallAgent : Agent
 {
 	public Rigidbody rBody;
 	public Transform Target;
-	public float forceMultiplier = 8;
-	public GameObject ray;
+	public float speed = 5;
+	public GameObject sensor;
+
+	private Vector2[] positions;
+	private int randomOff;
 
 	Vector3 lastPosition;
 	Vector3 currentDirection;
     public void Start()
 	{
 		Debug.Log("Started Simulator");
+		positions = new Vector2[3];
+
+		positions[0] = new Vector2(3, 3);
+		positions[0] = new Vector2(-3,-3);
+		positions[0] = new Vector2(1, -1);
+
+		randomOff = 5;
 	}
 	public override void OnEpisodeBegin()
 	{
 		this.rBody.angularVelocity = Vector3.zero;
 		this.rBody.velocity = Vector3.zero;
 
-		int posA = Random.Range(-3, 3);
-		int posB = Random.Range(-3, 3);
 
-		//Position Correction
-		if (posA == 2) posA = 3;
-		else if (posA == -2) posA = -3;
+		int r=Random.Range(0, 3);
+		Vector2 newPos=new Vector2(positions[r].x, positions[r].y);
 
-		if (posB == 0) posB = -1;
-		else if (posB == -2) posB = -3;
-		else if (posB == 2) posB = 3;
-
-		if (posA == 0 && posB == 1) posA = 1;
-		else if (posA == -1 && posB == 1) posA = -3;
-
-		this.transform.localPosition = new Vector3(posA * 5.0f, 1.5f, posB * 5.0f);
+		this.transform.localPosition = new Vector3(newPos.x * randomOff, 1.5f, newPos.y * randomOff);
 
 		this.transform.localRotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
 
 		lastPosition = this.transform.localPosition;
 		currentDirection = Vector3.zero;
-		ray.transform.rotation = Quaternion.LookRotation(currentDirection);
+		sensor.transform.rotation = Quaternion.LookRotation(currentDirection);
 	}
 
 	public override void CollectObservations(VectorSensor sensor)
@@ -63,7 +63,7 @@ public class BallAgent : Agent
 		lastPosition = this.transform.localPosition;
 		if (currentDirection != Vector3.zero)
 		{
-			ray.transform.rotation = Quaternion.Slerp(ray.transform.rotation, Quaternion.LookRotation(currentDirection), Time.deltaTime * 75);
+			sensor.transform.rotation = Quaternion.Slerp(sensor.transform.rotation, Quaternion.LookRotation(currentDirection), Time.deltaTime * 75);
         }
 
 		if (StepCount >= MaxStep)
@@ -79,7 +79,7 @@ public class BallAgent : Agent
 		Vector3 controlSignal = Vector3.zero;
 		controlSignal.x = actionBuffers.ContinuousActions[0];
 		controlSignal.z = actionBuffers.ContinuousActions[1];
-		rBody.AddForce(controlSignal * forceMultiplier);
+		rBody.AddForce(controlSignal * speed);
 
 		SetReward(-1 / MaxStep);
 
@@ -102,6 +102,7 @@ public class BallAgent : Agent
 
 		if (other.gameObject.CompareTag("Finish"))
 		{
+			Debug.Log("Finish reached");
 			SetReward(1.0f);
 			EndEpisode();
 		}
