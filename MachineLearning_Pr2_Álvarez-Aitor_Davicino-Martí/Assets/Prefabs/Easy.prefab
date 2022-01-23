@@ -494,7 +494,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 8
+    VectorObservationSize: 24
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 2
@@ -504,7 +504,7 @@ MonoBehaviour:
     VectorActionSpaceType: 1
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 5022602860645237092, guid: 7ae5b6202a7589e4dbf536d62cd433c2, type: 3}
-  m_InferenceDevice: 3
+  m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: RollerBall
   TeamId: 4
@@ -529,7 +529,7 @@ MonoBehaviour:
   MaxStep: 1000
   rBody: {fileID: 5269430909067703843}
   Target: {fileID: 5945442776451502468}
-  forceMultiplier: 10
+  forceMultiplier: 5
   ray: {fileID: 8893722953748548147}
 --- !u!114 &7995313916069172777
 MonoBehaviour:
