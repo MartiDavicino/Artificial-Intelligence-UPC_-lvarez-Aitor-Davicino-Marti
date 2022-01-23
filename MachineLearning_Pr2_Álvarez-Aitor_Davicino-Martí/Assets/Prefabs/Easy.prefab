@@ -494,7 +494,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 24
+    VectorObservationSize: 8
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 2
@@ -503,10 +503,10 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 5022602860645237092, guid: daf2b8dbebaec0c4aa838b978da6071b, type: 3}
-  m_InferenceDevice: 0
+  m_Model: {fileID: 5022602860645237092, guid: 48d341e3ad458ea43961d4de0fa5fcc0, type: 3}
+  m_InferenceDevice: 3
   m_BehaviorType: 0
-  m_BehaviorName: MazeBall
+  m_BehaviorName: RollerBall
   TeamId: 3
   m_UseChildSensors: 1
   m_UseChildActuators: 1
@@ -529,7 +529,7 @@ MonoBehaviour:
   MaxStep: 1000
   rBody: {fileID: 5269430909067703843}
   Target: {fileID: 5945442776451502468}
-  forceMultiplier: 4
+  forceMultiplier: 10
   ray: {fileID: 8893722953748548147}
 --- !u!114 &7995313916069172777
 MonoBehaviour:
@@ -543,7 +543,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 5
+  DecisionPeriod: 10
   TakeActionsBetweenDecisions: 1
 --- !u!1 &8893722953748548147
 GameObject:
